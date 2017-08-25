@@ -66,6 +66,8 @@
     import Pagination from './Pagination';
     import {classList} from '../helpers';
 
+    let instanceCount = 0;
+
     export default {
         components: {
             TableColumnHeader,
@@ -82,7 +84,6 @@
             sortBy: {default: '', type: String},
             sortOrder: {default: '', type: String},
 
-            cacheId: {default: ''},
             cacheLifetime: {default: 5},
 
             tableClass: {default: settings.tableClass},
@@ -101,12 +102,17 @@
             },
             pagination: null,
 
+            instanceNo: 0,
+
             localSettings: {},
         }),
 
         created() {
             this.sort.fieldName = this.sortBy;
             this.sort.order = this.sortOrder;
+
+            this.instanceNo = instanceCount;
+            instanceCount += 1;
 
             this.restoreState();
         },
@@ -188,7 +194,7 @@
             },
 
             storageKey() {
-                return `vue-table-component.${window.location.host}${window.location.pathname}${this.cacheId}`;
+                return `vue-table-component.${window.location.host}${window.location.pathname}${this.instanceNo}`;
             },
         },
 
